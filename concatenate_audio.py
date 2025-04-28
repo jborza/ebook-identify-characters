@@ -33,7 +33,6 @@ def concatenate_audio_files(input_dir, output_file):
         "-f", "concat",
         "-safe", "0",
         "-i", file_list_path,
-        "-c", "copy",
         output_file
     ]
 
@@ -50,10 +49,10 @@ def concatenate_audio_files(input_dir, output_file):
 
 if __name__ == "__main__":
     # Directory containing the WAV files
-    input_dir = "output_wavs"
+    input_dir = "output_wavs_book"
 
     # Output file name
-    output_file = "final_output.wav"
+    output_file = "the-lottery.mp3"
 
     # Concatenate audio files
     concatenate_audio_files(input_dir, output_file)
