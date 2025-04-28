@@ -29,16 +29,18 @@ if __name__ == "__main__":
     # Example usage
     model_name = "llama2"  # Replace with the installed model name (e.g., "llama2", "mistral", etc.)
     prompt = """
-    Analyze the following text and identify whether each sentence is narrated or spoken by a character. 
-    Provide the speaker's name if applicable:
+    Analyze the following text and identify whether each sentence is narrated or spoken by a character.
+    want only the spoken dialogue labeled with the character name, and any narration (like "said the girl") separated out and marked as Narrated.
     
+    Prefix each sentence with "Narrated:" or "Character:" where Character is the character name.
+
     He waved his wand, but nothing happened. Scabbers stayed gray and fast asleep.
 
-    “Are you sure that’s a real spell?” said the girl. “Well, it’s not very good, is it? I’ve 
-    tried a few simple spells just for practice and it’s all worked for me. Nobody in my 
-    family’s magic at all, it was ever such a surprise when I got my letter, but I was ever 
+    “Are you sure that’s a real spell?” said the girl. “Well, it’s not very good, is it? I’ve
+    tried a few simple spells just for practice and it’s all worked for me. Nobody in my
+    family’s magic at all, it was ever such a surprise when I got my letter, but I was ever
     so pleased, of course, I mean, it’s the very best school of witchcraft there is, I’ve 
-    heard — I’ve learned all our course books by heart, of course, I just hope it will be 
+    heard — I’ve learned all our course books by heart, of course, I just hope it will be
     enough — I’m Hermione Granger, by the way, who are you?”
 
     She said all this very fast.
