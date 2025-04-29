@@ -61,7 +61,7 @@ def process_book(file_path):
     processed_text = "\n\n".join(processed_chunks)
 
     # Save the processed text to a new file
-    output_file = file_path.replace(".txt", "_processed.txt")
+    output_file = file_path.replace(".txt", "_openai_processed.txt")
     with open(output_file, "w", encoding="utf-8") as output:
         output.write(processed_text)
 
@@ -69,7 +69,7 @@ def process_book(file_path):
 
 if __name__ == "__main__":
     # Specify the path to your book file
-    book_file_path = "sample_hut.txt"
+    book_file_path = "local_llms\\prompt-gemma.txt"
 
     # Process the book
     process_book(book_file_path)
