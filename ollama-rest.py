@@ -82,7 +82,9 @@ def process_chunks_with_api(directory, model_name):
     """
     print(f"Processing chunks with model: {model_name}")
     # Get all chunk files in the directory
-    chunk_files = sorted([f for f in os.listdir(directory) if f.startswith("chunk_") and f.endswith(".txt")])
+    #chunk_files = sorted([f for f in os.listdir(directory) if f.startswith("chunk_") and f.endswith(".txt")])
+
+    chunk_files = [book_file_path]
 
     for chunk_file in chunk_files:
         chunk_path = os.path.join(directory, chunk_file)
@@ -93,10 +95,20 @@ def process_chunks_with_api(directory, model_name):
 
         # Prepare the prompt for Ollama
         prompt = f"""
-        Analyze the following text and identify whether each sentence is narrated or spoken by a character.
-        Provide the speaker's name if applicable:
+Analyze the following text and output a CSV format with two columns: "Speaker" and "Text".
 
-        Prefix each sentence with "Narrated:" or "[Character Name]:".
+1. Spoken dialogue should be labeled with the character name in the "Speaker" column, and the spoken words in the "Text" column.
+2. Narration (such as "said the girl" or scene descriptions) should be labeled as Narrated in the "Speaker" column, with the narration in the "Text" column.
+3. Only the spoken dialogue should get the character name label
+4. If consecutive sentences originate from the same speaker (whether a character or "Narrated"), concatenate them into one row instead of separate rows.
+5. If dialogue and narration are mixed in a sentence, separate them into two rows: one for dialogue, one for narration.
+    for example
+    "Jeyne","Joffrey likes your sister," Jeyne whispered, proud as if she had something to do with it.
+
+    should be 
+    "Jeyne","Joffrey likes your sister,"
+    "Narrated","Jeyne whispered, proud as if she had something to do with it."
+    Here is the text:
         {chunk_content}
         """
 
@@ -148,7 +160,8 @@ def process_chunks(directory, model_name):
         model_name (str): The name of the Ollama model to use (e.g., "llama2").
     """
     # Get all chunk files in the directory
-    chunk_files = sorted([f for f in os.listdir(directory) if f.startswith("chunk_") and f.endswith(".txt")])
+    #chunk_files = sorted([f for f in os.listdir(directory) if f.startswith("chunk_") and f.endswith(".txt")])
+    chunk_files = [book_file_path]
 
     for chunk_file in chunk_files:
         chunk_path = os.path.join(directory, chunk_file)
@@ -189,13 +202,12 @@ def process_chunks(directory, model_name):
 
         return
 
+book_file_path = "prompt-text.txt"
+
 if __name__ == "__main__":
     # Example usage
-    directory = "chapter_03"  # Directory containing chunk files (e.g., chunk_1.txt, chunk_2.txt)
+    directory = "local_llms"  # Directory containing chunk files (e.g., chunk_1.txt, chunk_2.txt)
     #model_name = "llama3.2:1b"  # Replace with your desired model name (e.g., "llama2", "mistral")
-    process_chunks_with_api(directory, "gemma3:latest")
-    process_chunks_with_api(directory, "qwen2.5:latest")
-    process_chunks_with_api(directory, "llama2:latest")
-    process_chunks_with_api(directory, "deepseek-r1:1.5b")
-    process_chunks_with_api(directory, "llama3.2:1b")
+    process_chunks_with_api(directory, "qwen3:8b")
+    process_chunks_with_api(directory, "qwen2.5-coder:14b")
     process_chunks_with_api(directory, "llama3.2:latest")
