@@ -7,7 +7,7 @@ import os
 #read an input csv file with the following columns:
 #        "Speaker" and "Text".
 
-output_dir = "output_wavs_book"
+output_dir = "output_wavs_literotica"
 
 def load_numpy_kpipeline():
     import numpy as np
@@ -36,22 +36,17 @@ class KokoroTTS:
         :param split_pattern: Optional pattern to split text into smaller chunks.
         """
 
-        # TODO cache voices - necessary?
         generator = self.tts(
             text, voice=voice, speed=self.speed, split_pattern=split_pattern
         )
         audio_segments = []
         for gs, ps, audio in generator:
+            # most likely we'll generate the speech in the single pass
             if audio is not None:
-                    # Only convert if it's a numpy array, not if already tensor
-                    audio_tensor = audio 
-
-                    audio_segments.append(audio_tensor)
+                audio_tensor = audio 
+                audio_segments.append(audio_tensor)
         audio = np.concatenate(audio_segments)
-        
         sf.write(output_path, audio, 24000, format=self.output_format)
-
-
 
 def list_speakers(filename):
     speakers = set()
@@ -63,7 +58,11 @@ def list_speakers(filename):
 
 def is_character_male(speaker):
     # Placeholder function to determine if a character
-    if 'Bill' in speaker or 'Jack ' in speaker or 'Man' in speaker or 'Son' in speaker:
+    if speaker == "I":
+        return True
+    elif 'Wife' in speaker or 'Daughter' in speaker or 'wife' in speaker or 'daughter' in speaker:
+        return False
+    elif 'Bill' in speaker or 'Jack ' in speaker or 'Man' in speaker or 'Son' in speaker:
         return True
     elif 'Mrs' in speaker or 'Miss' in speaker or 'Ms.' in speaker:
         return False
@@ -71,7 +70,9 @@ def is_character_male(speaker):
         return False
     elif 'Mr' in speaker or 'Sir' in speaker:
         return True
-    elif 'Narrated' in speaker or 'Villagers' in speaker:   
+    elif 'Narrated' in speaker:
+        return False
+    elif 'Villagers' in speaker:   
         return True
     else:
         print(f"{speaker} is unknown")
@@ -99,7 +100,8 @@ def assign_voice_to_speakers(speakers, voices):
     return speakers_to_voices
 
 if __name__ == "__main__":
-    filename = "books/lottery-gpt4o-output_20250428_180407.txt"
+    filename = "literotica/welcome-back-gpt4o_20250429_163747.txt"
+
     speakers = list_speakers(filename)
     print("Speakers:")
     for speaker in speakers:
