@@ -3,3 +3,5 @@ chapter_04/
 chapters/
 chapter_chunks/
 *.txt
+*.wav
+*.mp3
