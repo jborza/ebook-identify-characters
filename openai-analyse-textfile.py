@@ -9,7 +9,7 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # read the text from a file
-with open("books/the_lottery.txt", "r", encoding="utf-8") as file:
+with open("literotica/welcome-back.txt", "r", encoding="utf-8") as file:
     text = file.read()
 
 # Define the system prompt and user message
@@ -17,14 +17,16 @@ system_prompt = "You are a helpful assistant that formats text into CSV with 'Sp
 user_prompt = f"""
 Analyze the following text and output a CSV format with two columns: "Speaker" and "Text".
 
-Analyze the following text and output a CSV format with two columns: "Speaker" and "Text".
-
 1. Spoken dialogue should be labeled with the character name in the "Speaker" column, and the spoken words in the "Text" column.
 2. Narration (such as "said the girl" or scene descriptions) should be labeled as Narrated in the "Speaker" column, with the narration in the "Text" column.
 3. Only the spoken dialogue should get the character name label
-4. If dialogue and narration are mixed in a sentence, separate them into two rows: one for dialogue, one for narration.
-5. Wrap text in double quotes if it contains commas.
-6. If consecutive sentences originate from the same speaker (whether a character or "Narrated"), concatenate them into one row instead of separate rows.
+4. If dialogue and narration are mixed in a sentence, separate them into two rows: one for dialogue, one for narration. Don't forget about this.
+    for example
+    "Jeyne","Joffrey likes your sister," Jeyne whispered, proud as if she had something to do with it.
+
+    should be 
+    "Jeyne","Joffrey likes your sister,"
+    "Narrated","Jeyne whispered, proud as if she had something to do with it."
 
 Here is the text:
 {text}
